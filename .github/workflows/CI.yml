@@ -39,32 +39,32 @@ jobs:
     name: Nuget
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        PackageName:
-          [
-            BilibiliLiveRecordDownLoader.Shared,
-            BilibiliLiveRecordDownLoader.BilibiliApi,
-          ]
+    # strategy:
+    #   matrix:
+    #     PackageName:
+    #       [
+    #         BilibiliLiveRecordDownLoader.Shared,
+    #         BilibiliLiveRecordDownLoader.BilibiliApi,
+    #       ]
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
+    #   - name: Setup .NET
+    #     uses: actions/setup-dotnet@v4
+    #     with:
+    #       dotnet-version: 8.0.x
 
-      - name: Build
-        shell: pwsh
-        run: dotnet build -c Release ${{ matrix.PackageName }}\${{ matrix.PackageName }}.csproj
+    #   - name: Build
+    #     shell: pwsh
+    #     run: dotnet build -c Release ${{ matrix.PackageName }}\${{ matrix.PackageName }}.csproj
 
-      - name: Push nuget packages
-        shell: pwsh
-        run: |
-          dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
-          dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
+    #   - name: Push nuget packages
+    #     shell: pwsh
+    #     run: |
+    #       dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+    #       dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
 
   release:
     name: Release
