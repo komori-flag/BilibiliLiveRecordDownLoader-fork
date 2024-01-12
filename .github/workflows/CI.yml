@@ -40,12 +40,12 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        PackageName: []
-          # [
-          #   BilibiliLiveRecordDownLoader.Shared,
-          #   BilibiliLiveRecordDownLoader.BilibiliApi,
-          # ]
+      # matrix:
+      #   PackageName:
+      #     [
+      #       BilibiliLiveRecordDownLoader.Shared,
+      #       BilibiliLiveRecordDownLoader.BilibiliApi,
+      #     ]
 
     steps:
       - name: Checkout code
