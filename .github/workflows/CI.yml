@@ -60,11 +60,11 @@ jobs:
         shell: pwsh
         run: dotnet build -c Release ${{ matrix.PackageName }}\${{ matrix.PackageName }}.csproj
 
-      - name: Push nuget packages
-        shell: pwsh
-        run: |
-          dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
-          dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
+      # - name: Push nuget packages
+      #   shell: pwsh
+      #   run: |
+      #     dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      #     dotnet nuget push ${{ matrix.PackageName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
 
   release:
     name: Release
