@@ -2,6 +2,7 @@ using BilibiliApi.Enums;
 using BilibiliApi.Model.PlayUrl;
 using BilibiliApi.Model.RoomInfo;
 using DynamicData;
+using System.Text.RegularExpressions;
 
 namespace BilibiliApi.Clients;
 
@@ -18,8 +19,7 @@ public partial class BilibiliApiClient
 	/// <returns></returns>
 	public async Task<RoomPlayInfo?> GetRoomPlayInfoAsync(long roomId, long qn = 10000, CancellationToken token = default)
 	{
-		// string url = $@"https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id={roomId}&no_playurl=0&qn={qn}&platform=web&protocol=0,1&format=0,1,2&codec=0,1";
-		string url = $@"http://127.0.0.1:4000/xlive/web-room/v2/index/getRoomPlayInfo?room_id={roomId}&no_playurl=0&qn={qn}&platform=web&protocol=0,1&format=0,1,2&codec=0,1";
+		string url = $@"https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id={roomId}&no_playurl=0&qn={qn}&platform=web&protocol=0,1&format=0,1,2&codec=0,1";
 		return await GetJsonAsync<RoomPlayInfo>(url, token);
 	}
 
@@ -103,12 +103,34 @@ public partial class BilibiliApiClient
 
 		if (info.Protocol is @"http_hls")
 		{
-			baseUrl = baseUrl.Replace(@"_bluray", string.Empty);
+			if (qn is 10000)
+			{
+				baseUrl = baseUrl.Replace(@"_1500", string.Empty);
+				baseUrl = baseUrl.Replace(@"_bluray", string.Empty);
+			}
 		}
+
+		string[] selfBuilt_biliLiveStreamUrl = [
+			@"https://c0--cn-gotcha01.bilivideo.com",
+			@"https://d0--cn-gotcha01.bilivideo.com",
+			@"https://c1--cn-gotcha01.bilivideo.com"
+		];
 
 		for (long i = 0; i < result.LongLength; ++i)
 		{
-			result[i] = new Uri(uriInfo[i].Host + baseUrl + uriInfo[i].Extra);
+			int randomIndex = new Random().Next(0, selfBuilt_biliLiveStreamUrl.Length);
+			if (info.Protocol != @"http_stream" && info.Format == @"fmp4")
+			{
+				result[i] = new Uri(selfBuilt_biliLiveStreamUrl[randomIndex] + baseUrl);
+			}
+			else if (info.Protocol != @"http_stream" && info.Format == @"ts")
+			{
+				result[i] = new Uri(uriInfo[i].Host + baseUrl + uriInfo[i].Extra);
+			}
+			else
+			{
+				result[i] = new Uri(selfBuilt_biliLiveStreamUrl[randomIndex] + baseUrl + uriInfo[i].Extra);
+			}
 		}
 
 		return (result, info.Format);
@@ -136,7 +158,12 @@ public partial class BilibiliApiClient
 
 		static bool GetValidUrlInfo(RoomPlayInfoStreamUrlInfo x)
 		{
-			return !string.IsNullOrEmpty(x.Host) && x.Host.StartsWith(@"https://");
+			return !string.IsNullOrEmpty(x.Host) &&
+				x.Host.StartsWith(@"https://") &&
+				(
+					Regex.IsMatch(x.Host, @"^https?\:\/\/cn-[^/]*.bilivideo.com") ||
+					Regex.IsMatch(x.Host, @"^https?\:\/\/[^\/]*cn-gotcha([\d])?01\.bilivideo\.com")
+				);
 		}
 	}
 

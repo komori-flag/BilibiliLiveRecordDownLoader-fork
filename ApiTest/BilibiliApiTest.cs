@@ -17,7 +17,7 @@ public class BilibiliApiTest
 	[TestMethod]
 	public async Task GetDanmuConfTestAsync()
 	{
-		DanmuConfMessage? json = await _apiClient.GetDanmuConfAsync(732);
+		DanmuConfMessage? json = await _apiClient.GetDanmuConfAsync(866466);
 		Assert.IsNotNull(json);
 		Assert.AreEqual(0, json.code);
 		Assert.AreEqual(@"0", json.message);
@@ -52,7 +52,7 @@ public class BilibiliApiTest
 	[TestMethod]
 	public async Task GetRoomInfoTestAsync()
 	{
-		RoomInfoMessage? json = await _apiClient.GetRoomInfoAsync(732);
+		RoomInfoMessage? json = await _apiClient.GetRoomInfoAsync(866466);
 		Assert.IsNotNull(json);
 		Assert.AreEqual(0, json.code);
 		Assert.AreEqual(@"0", json.message);
@@ -60,13 +60,13 @@ public class BilibiliApiTest
 
 		Assert.IsNotNull(json.data.room_info);
 		Assert.AreEqual(6154037, json.data.room_info.room_id);
-		Assert.AreEqual(732, json.data.room_info.short_id);
+		Assert.AreEqual(866466, json.data.room_info.short_id);
 		Assert.IsTrue(json.data.room_info.live_status is 0 or 1 or 2);
 		Assert.IsTrue(!string.IsNullOrWhiteSpace(json.data.room_info.title));
 
 		Assert.IsNotNull(json.data.anchor_info);
 		Assert.IsNotNull(json.data.anchor_info.base_info);
-		Assert.AreEqual(@"Asaki大人", json.data.anchor_info.base_info.uname);
+		Assert.AreEqual(@"萝卜吃米洛", json.data.anchor_info.base_info.uname);
 	}
 
 	[TestMethod]

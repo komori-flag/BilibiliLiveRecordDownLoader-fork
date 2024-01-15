@@ -80,7 +80,7 @@ public class RoomStatus : ReactiveObject
 	/// 房间号
 	/// </summary>
 	[Reactive]
-	public long RoomId { get; set; } = 732;
+	public long RoomId { get; set; } = 866466;
 
 	/// <summary>
 	/// 主播名
