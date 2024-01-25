@@ -428,7 +428,7 @@ public class RoomStatus : ReactiveObject
 							{
 								if (LiveStatus is LiveStatus.直播)
 								{
-									_logger.LogWarning(@"录播不稳定，即将尝试重连");
+									_logger.LogWarning(@"录制不稳定，即将尝试重连");
 								}
 								// ReSharper disable once AccessToDisposedClosure
 								recordStreamCts.Cancel();
@@ -458,7 +458,7 @@ public class RoomStatus : ReactiveObject
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError(ex, @"下载直播流时发生错误");
+					_logger.LogError(ex, @"录制直播流时发生错误");
 				}
 			}
 			_logger.LogInformation(@"不再录制");

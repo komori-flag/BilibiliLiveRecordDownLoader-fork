@@ -2,6 +2,7 @@ using BilibiliApi.Enums;
 using BilibiliApi.Model.PlayUrl;
 using BilibiliApi.Model.RoomInfo;
 using DynamicData;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace BilibiliApi.Clients;
@@ -106,7 +107,16 @@ public partial class BilibiliApiClient
 			if (qn is 10000)
 			{
 				baseUrl = baseUrl.Replace(@"_1500", string.Empty);
-				baseUrl = baseUrl.Replace(@"_bluray", string.Empty);
+
+				if (info.Format == @"fmp4")
+				{
+					baseUrl = Regex.Replace(baseUrl, @"(/live-bvc/\d+/live_\d+_\d+)\/index.m3u8\?", @"$1_bluray/index.m3u8?");
+				}
+
+				if (info.Format == @"ts")
+				{
+					baseUrl = Regex.Replace(baseUrl, @"(/live-bvc/\d+/live_\d+_\d+)\.m3u8\?", @"$1_bluray.m3u8?");
+				}
 			}
 		}
 
