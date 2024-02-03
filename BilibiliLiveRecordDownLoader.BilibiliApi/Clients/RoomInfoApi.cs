@@ -104,19 +104,10 @@ public partial class BilibiliApiClient
 
 		if (info.Protocol is @"http_hls")
 		{
+			baseUrl = baseUrl.Replace(@"_bluray", string.Empty);
 			if (qn is 10000)
 			{
 				baseUrl = baseUrl.Replace(@"_1500", string.Empty);
-
-				if (info.Format == @"fmp4")
-				{
-					baseUrl = Regex.Replace(baseUrl, @"(/live-bvc/\d+/live_\d+_\d+)\/index.m3u8\?", @"$1_bluray/index.m3u8?");
-				}
-
-				if (info.Format == @"ts")
-				{
-					baseUrl = Regex.Replace(baseUrl, @"(/live-bvc/\d+/live_\d+_\d+)\.m3u8\?", @"$1_bluray.m3u8?");
-				}
 			}
 		}
 
@@ -168,12 +159,7 @@ public partial class BilibiliApiClient
 
 		static bool GetValidUrlInfo(RoomPlayInfoStreamUrlInfo x)
 		{
-			return !string.IsNullOrEmpty(x.Host) &&
-				x.Host.StartsWith(@"https://") &&
-				(
-					Regex.IsMatch(x.Host, @"^https?\:\/\/cn-[^/]*.bilivideo.com") ||
-					Regex.IsMatch(x.Host, @"^https?\:\/\/[^\/]*cn-gotcha([\d])?01\.bilivideo\.com")
-				);
+			return !string.IsNullOrEmpty(x.Host) && (x.Host.StartsWith(@"https://") || x.Host.StartsWith(@"http://"));
 		}
 	}
 
