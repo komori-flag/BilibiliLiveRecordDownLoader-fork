@@ -458,7 +458,7 @@ public class RoomStatus : ReactiveObject
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError(ex, @"录制直播流时发生错误");
+					_logger.LogError(ex, @"下载直播流时发生错误");
 				}
 			}
 			_logger.LogInformation(@"不再录制");

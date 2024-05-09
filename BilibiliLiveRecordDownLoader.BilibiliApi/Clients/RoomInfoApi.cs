@@ -2,7 +2,6 @@ using BilibiliApi.Enums;
 using BilibiliApi.Model.PlayUrl;
 using BilibiliApi.Model.RoomInfo;
 using DynamicData;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace BilibiliApi.Clients;
@@ -102,13 +101,10 @@ public partial class BilibiliApiClient
 
 		string baseUrl = info.Codec.BaseUrl!;
 
-		if (info.Protocol is @"http_hls")
+		if (info.Format is @"fmp4")
 		{
+			baseUrl = baseUrl.Replace(@"_1500", string.Empty);
 			baseUrl = baseUrl.Replace(@"_bluray", string.Empty);
-			if (qn is 10000)
-			{
-				baseUrl = baseUrl.Replace(@"_1500", string.Empty);
-			}
 		}
 
 		string[] selfBuilt_biliLiveStreamUrl = [
